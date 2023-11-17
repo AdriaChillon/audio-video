@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/canvas@2.11.2/browser.min.js"></script>
     <title>Demo Àudio i Vídeo</title>
 </head>
 <body>
@@ -34,5 +36,28 @@
         <track src="media/captions/metro-es.vtt" label="Espanyol" kind="captions" srclang="es">
         El teu navegador no suporta l'element HTML vídeo.
     </video>
+    <canvas id="canvasElement" style="display: none;"></canvas> <!-- Ocultar el canvas -->
+    <button id="captureButton" class="btn btn-info" onclick="descargarFotograma()">SNAPSHOTS</button> 
+    <script>
+        document.getElementById('captureButton').addEventListener('click', function() {
+            var video = document.querySelector('video');
+            var canvas = document.getElementById('canvasElement');
+            var context = canvas.getContext('2d');
+            
+            // Ajustar el tamaño del canvas al tamaño del vídeo
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+    
+            // Dibujar el fotograma actual del vídeo en el canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+            // Crear una imagen y descargarla
+            var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+            var link = document.createElement('a');
+            link.download = 'snapshot.png';
+            link.href = image;
+            link.click();
+        });
+    </script>    
 </body>
 </html>
