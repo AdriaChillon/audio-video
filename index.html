@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/canvas@2.11.2/browser.min.js"></script>
     <title>Demo Àudio i Vídeo</title>
 </head>
+
 <body>
     <audio controls>
         <source src="media/techbg.mp3" type="audio/mp3">
         Ho sento, el teu navegador no suporta àudio d'HTML5.
     </audio>
     <div style="padding: 1em; margin-bottom: 1em; border: 1px; background-color: #eee;">
-        "<a rel="nofollow" class="external text" href="https://timtaj.com/royalty-free-music/background-technology">Background Technology</a>" 
-        by <a rel="nofollow" class="external text" href="https://freemusicarchive.org/music/timtaj/contact">Taj Tim</a> 
-        is licensed under <a rel="nofollow" class="external text" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">Attribution-NonCommercial-NoDerivatives 4.0 International License</a>
+        "<a rel="nofollow" class="external text"
+            href="https://timtaj.com/royalty-free-music/background-technology">Background Technology</a>"
+        by <a rel="nofollow" class="external text" href="https://freemusicarchive.org/music/timtaj/contact">Taj Tim</a>
+        is licensed under <a rel="nofollow" class="external text"
+            href="https://creativecommons.org/licenses/by-nc-nd/4.0/">Attribution-NonCommercial-NoDerivatives 4.0
+            International License</a>
     </div>
     <hr>
     <!-- L'etiqueta <video> també accepta varies propietats: height, width, autoplay... 
@@ -32,32 +38,50 @@
         <!-- captions: normalment per persones amb discapacitat auditiva, amb descripcions diverses
              subtitles: per traducció dels diàlegs.
         -->
-        <track src="media/captions/metro-cat.vtt" label="Català" kind="captions" srclang="es-cat" default>
+        <track src="media/captions/metro-cat.vtt" label="Català" kind="captions" srclang="ca" default>
         <track src="media/captions/metro-es.vtt" label="Espanyol" kind="captions" srclang="es">
+
         El teu navegador no suporta l'element HTML vídeo.
     </video>
-    <canvas id="canvasElement" style="display: none;"></canvas> <!-- Ocultar el canvas -->
-    <button id="captureButton" class="btn btn-info" onclick="descargarFotograma()">SNAPSHOTS</button> 
+    <canvas id="canvasElement" style="display: none;"></canvas> <!-- Ocultar el canvas --><br>
+    <button id="captureButton" class="btn btn-info" onclick="descargarFotograma()">SNAPSHOTS</button>
+    <div id="snap"></div>
     <script>
-        document.getElementById('captureButton').addEventListener('click', function() {
+        document.getElementById('captureButton').addEventListener('click', function () {
+            //Obtener elementos del DOM
             var video = document.querySelector('video');
             var canvas = document.getElementById('canvasElement');
             var context = canvas.getContext('2d');
-            
-            // Ajustar el tamaño del canvas al tamaño del vídeo
+
+            //Ajustar el tamaño del canvas
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-    
-            // Dibujar el fotograma actual del vídeo en el canvas
+
+            //Dibujar el fotograma en el canvas
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
-    
-            // Crear una imagen y descargarla
-            var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-            var link = document.createElement('a');
-            link.download = 'snapshot.png';
-            link.href = image;
-            link.click();
+
+            //Mostrar la imagen en un elemento <img>
+            var img = document.createElement('img');
+            img.style.verticalAlign = "";
+            img.style.display = "inline-block";
+            img.src = canvas.toDataURL("image/png");
+            document.getElementById("snap").appendChild(img);
+
+            //Agregar botón para descargar la imagen
+            var downloadButton = document.createElement('button');
+            downloadButton.className = "btn btn-primary";
+            downloadButton.textContent = 'Descargar Imagen';
+            downloadButton.addEventListener('click', function () {
+                var link = document.createElement('a');
+                link.download = 'snapshot.png';
+                link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                link.click();
+            });
+            
+            document.getElementById("snap").appendChild(downloadButton);
         });
-    </script>    
+
+    </script>
 </body>
+
 </html>
