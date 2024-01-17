@@ -48,26 +48,31 @@
     <div id="snap"></div>
     <script>
         document.getElementById('captureButton').addEventListener('click', function () {
-            //Obtener elementos del DOM
+            // Obtener elementos del DOM
             var video = document.querySelector('video');
             var canvas = document.getElementById('canvasElement');
             var context = canvas.getContext('2d');
 
-            //Ajustar el tamaño del canvas
+            // Ajustar el tamaño del canvas
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
 
-            //Dibujar el fotograma en el canvas
+            // Dibujar el fotograma en el canvas
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            //Mostrar la imagen en un elemento <img>
+            // Convertir la imagen a blanco y negro (escala de grises)
+            context.fillStyle = 'rgba(0, 0, 0, 1)'; // Configurar el color a negro
+            context.globalCompositeOperation = 'saturation'; // Configurar la operación para escala de grises
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Mostrar la imagen en un elemento <img>
             var img = document.createElement('img');
             img.style.verticalAlign = "";
             img.style.display = "inline-block";
             img.src = canvas.toDataURL("image/png");
             document.getElementById("snap").appendChild(img);
 
-            //Agregar botón para descargar la imagen
+            // Agregar botón para descargar la imagen
             var downloadButton = document.createElement('button');
             downloadButton.className = "btn btn-primary";
             downloadButton.textContent = 'Descargar Imagen';
@@ -77,7 +82,7 @@
                 link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
                 link.click();
             });
-            
+
             document.getElementById("snap").appendChild(downloadButton);
         });
 
