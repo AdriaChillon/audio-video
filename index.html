@@ -5,34 +5,92 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demo Àudio i Vídeo</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Agregamos estilos para mejorar la apariencia del deslizador de volumen */
+        .controlButtons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        #volumeSlider {
+            width: 150px;
+            margin: 0 10px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* Estilo para el ícono de pausa */
+        #pauseIcon {
+            display: none; /* Inicialmente oculto */
+        }
+
+        /* Estilo para el ícono de reproducción */
+        #playIcon {
+            display: inline;
+        }
+    </style>
 </head>
 <body>
-    <audio controls>
+    <audio id="player">
         <source src="media/techbg.mp3" type="audio/mp3">
         Ho sento, el teu navegador no suporta àudio d'HTML5.
     </audio>
-    <div style="padding: 1em; margin-bottom: 1em; border: 1px; background-color: #eee;">
-        "<a rel="nofollow" class="external text" href="https://timtaj.com/royalty-free-music/background-technology">Background Technology</a>" 
-        by <a rel="nofollow" class="external text" href="https://freemusicarchive.org/music/timtaj/contact">Taj Tim</a> 
-        is licensed under <a rel="nofollow" class="external text" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">Attribution-NonCommercial-NoDerivatives 4.0 International License</a>
+
+    <div class="fonsPlayer">
+        <div class="ocean">
+            <div class="wave"></div>
+            <div class="wave"></div>
+        </div>
     </div>
-    <hr>
-    <!-- L'etiqueta <video> també accepta varies propietats: height, width, autoplay... 
-         poster permet establir un fons per quan no el vídeo no s'està reproduint.
-    -->
-    <video controls>
-        <!-- podem tenir diversos formats. El repoductor escollirà el primer que reconegui. -->
-        <source src="media/metro.mp4" type="video/mp4">
-        <source src="media/metro.ogg" type="video/ogg">
-        <!-- afegim els subtítols en format WebVTT (Web Video Text Tracks), un per cada idioma
-             El reproductor ens deixa escollir idioma en el seu menú per defecte.
-        -->
-        <!-- captions: normalment per persones amb discapacitat auditiva, amb descripcions diverses
-             subtitles: per traducció dels diàlegs.
-        -->
-        <track src="media/captions/metro-cat.vtt" label="Català" kind="captions" srclang="es-cat" default>
-        <track src="media/captions/metro-es.vtt" label="Espanyol" kind="captions" srclang="es">
-        El teu navegador no suporta l'element HTML vídeo.
-    </video>
+
+    <div class="controlButtons">
+        <!-- Botón de reproducción SVG -->
+        <button type="button" onclick="toggleAudio();">
+            <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+            <!-- Icono de pausa oculto inicialmente -->
+            <svg id="pauseIcon" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg>
+        </button>
+
+        <!-- Deslizador de volumen que comienza al tope -->
+        <input type="range" id="volumeSlider" min="0" max="100" value="100" step="1" oninput="cambiarVolumen(this.value)">
+    </div>
+
+    <script>
+        let audio = document.getElementById('player');
+        let pauseIcon = document.getElementById('pauseIcon');
+        let playIcon = document.getElementById('playIcon');
+
+        function toggleAudio() {
+            if (audio.paused) {
+                audio.play();
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'inline';
+            } else {
+                audio.pause();
+                playIcon.style.display = 'inline';
+                pauseIcon.style.display = 'none';
+            }
+
+            var waves = document.querySelectorAll('.wave');
+            for (var i = 0; i < waves.length; i++) {
+                waves[i].classList.toggle('playing');
+            }
+        }
+
+        // Función para cambiar el volumen
+        function cambiarVolumen(value) {
+            audio.volume = value / 100;
+        }
+    </script>
 </body>
 </html>
